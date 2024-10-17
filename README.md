@@ -1,53 +1,106 @@
+# YOLO 기반 일일 ‘미션 시스템’ 및 게임 요소를 활용한, 에너지 절약 스마트 홈 웹 개발
+
+## 프로젝트 개요
+이 프로젝트는 가정 내 전기 절약과 환경 보호를 주 목적으로 한 스마트 홈 웹 애플리케이션입니다. 사용자는 에너지 절약을 위한 다양한 미션을 수행하고, 이를 통해 게임적인 보상을 받습니다. YOLO(You Only Look Once) 기술을 활용하여 가전제품 제어 상태를 인식하며, 절약 모드 사용을 유도하여 경험치를 지급하는 시스템입니다.
+
+## 목차
+1. 프로젝트 개요
+2. 팀원 소개
+3. 개발 환경
+4. 설치 및 실행 방법
+5. 주요 기능
+6. 데이터 분석 및 YOLO 활용
+7. 기대효과 및 결론
+
+## 1. 팀원 소개
+- 김신희 (PM): 프로젝트 관리, 문서 작성
+- 윤창현: 데이터 분석, YOLO 활용 및 코드 검수
+- 노광우: 1주제 풀스택 개발, 데이터 시각화 및 코드 수정
+- 김민형 (발표자): 2주제 풀스택 개발, 1주제 프론트엔드 작업
+
+## 2. 프로젝트 개요
+스마트 홈 시장의 성장에 맞춰 사용자들에게 재미와 유용성을 제공하는 에너지 절약 웹 서비스를 기획했습니다. 파이썬 Django 프레임워크와 YOLO 기반 기술을 활용하여, 사용자가 일일 미션을 통해 전기 절약을 실천하고 보상을 받는 시스템을 구현했습니다.
+
+## 3. 개발 환경
+- **프레임워크**: Django
+- **프로그래밍 언어**: Python, HTML, CSS, JavaScript
+- **데이터베이스**: MySQL
+- **협업 도구**: FileZilla, Slack
+- **기타 도구**: YOLOv5 for 이미지 분석
+
+## 4. 설치 및 실행 방법
+
+### 4.1 필수 설치 항목
+
+#### 4.1.1 Python 설치
+프로젝트는 파이썬 3.9 이상의 버전을 사용합니다. 파이썬이 설치되어 있지 않다면 [Python 공식 사이트](https://www.python.org/downloads/)에서 설치해 주세요.
+
+#### 4.1.2 Django 설치
+아래 명령어로 Django를 설치할 수 있습니다.
+```
+pip install django
+```
+
+#### 4.1.3 MySQL 설치
+MySQL을 사용하여 데이터베이스를 설정했습니다. MySQL이 설치되어 있지 않다면 [MySQL 공식 사이트](https://dev.mysql.com/downloads/)에서 설치해 주세요.
+
+#### 4.1.4 MySQL Python 커넥터 설치
+```
+pip install mysqlclient
+```
+
+#### 4.1.5 YOLOv5 설치
+YOLOv5는 컴퓨터 비전 모델로, 전원 플러그 상태나 전등의 상태를 인식하는 데 사용됩니다. YOLOv5 설치는 [YOLOv5 공식 GitHub](https://github.com/ultralytics/yolov5)를 참고해 주세요.
+
+### 4.2 가상 환경 설정
+가상 환경을 생성하여 프로젝트 의존성을 관리할 수 있습니다.
 
 ```
-Corp_project
-├─ config
-│  ├─ asgi.py
-│  ├─ settings.py
-│  ├─ urls.py
-│  ├─ wsgi.py
-│  ├─ __init__.py
-│  └─ __pycache__
-│     ├─ settings.cpython-312.pyc
-│     ├─ urls.cpython-312.pyc
-│     ├─ wsgi.cpython-312.pyc
-│     └─ __init__.cpython-312.pyc
-├─ db.sqlite3
-├─ manage.py
-├─ README.md
-└─ Team_3E
-   ├─ admin.py
-   ├─ apps.py
-   ├─ migrations
-   │  ├─ 0001_initial.py
-   │  ├─ 0002_alter_users_email_character.py
-   │  ├─ __init__.py
-   │  └─ __pycache__
-   │     ├─ 0001_initial.cpython-312.pyc
-   │     ├─ 0002_alter_users_email_character.cpython-312.pyc
-   │     └─ __init__.cpython-312.pyc
-   ├─ models.py
-   ├─ static
-   │  ├─ character_detail.css
-   │  ├─ character_main.css
-   │  └─ main.css
-   ├─ templates
-   │  ├─ character_detail.html
-   │  ├─ character_main.html
-   │  ├─ main.html
-   │  ├─ register.html
-   │  ├─ user_login.html
-   │  └─ user_mypage.html
-   ├─ tests.py
-   ├─ urls.py
-   ├─ views.py
-   ├─ __init__.py
-   └─ __pycache__
-      ├─ admin.cpython-312.pyc
-      ├─ apps.cpython-312.pyc
-      ├─ models.cpython-312.pyc
-      ├─ urls.cpython-312.pyc
-      ├─ views.cpython-312.pyc
-      └─ __init__.cpython-312.pyc
-
+python -m venv venv
+source venv/bin/activate  # Windows의 경우: venv\Scripts\activate
 ```
+
+### 4.3 패키지 설치
+아래 명령어로 프로젝트에서 필요한 패키지를 설치하세요.
+
+```bash
+pip install -r requirements.txt
+```
+
+`requirements.txt` 파일에 추가된 필수 패키지는 아래와 같습니다:
+```txt
+Django==4.1
+mysqlclient
+```
+
+### 4.4 데이터베이스 마이그레이션
+데이터베이스 테이블을 생성하기 위해 마이그레이션을 실행하세요.
+```
+python manage.py makemigrations
+python manage.py migrate
+```
+
+### 4.5 서버 실행
+아래 명령어로 로컬 서버를 실행할 수 있습니다.
+```
+python manage.py runserver
+```
+
+### 4.6 YOLO 모델 학습 및 활용
+플러그와 스위치를 학습한 YOLO 모델을 사용하여 미션을 수행할 수 있습니다.
+
+## 5. 주요 기능
+- **회원 관리**: 회원가입, 로그인, 비밀번호 찾기, 회원 탈퇴
+- **캐릭터 관리**: 캐릭터 목록 조회, 레벨업, 대표 캐릭터 변경
+- **게임 기능**: NPC와의 대결, 일일 미션
+- **미션 수행**: 플러그 뽑기, 전등 끄기, 에너지 절약 퀴즈
+- **상점 및 랭킹**: 경험치 및 아이템 구매, 랭킹 시스템
+
+## 6. 데이터 분석 및 YOLO 활용
+- YOLOv5 기반의 이미지 분석을 통해 전기 절약 미션을 수행합니다. 플러그 뽑기 및 전등 끄기 미션에서 YOLO 기술을 사용하여 플러그와 스위치 상태를 판별합니다.
+- 절약 모드를 사용하여 에너지 절약 및 전기요금을 실시간 모니터링하고 대시보드로 시각화합니다.
+
+## 7. 기대효과 및 결론
+- **에너지 절약**: 일상에서 쉽게 실천할 수 있는 에너지 절약 행동을 통해 환경 보호에 기여합니다.
+- **경제적 혜택**: 일일 미션 완료 비율에 따라 전기 요금 할인 혜택을 제공합니다.
+- **서비스 지속성**: 사용자들이 게임을 통해 재미있게 전기 절약을 실천하고, 이를 습관화할 수 있도록 유도합니다.
