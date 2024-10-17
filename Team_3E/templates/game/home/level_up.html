@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <title>레벨업 페이지</title>
+    <script>
+        window.onload = function () {
+            // 메시지를 팝업창으로 표시하기
+            {% if messages %}
+            var uniqueMessages = new Set(); // 중복 제거를 위한 Set 사용
+            {% for message in messages %}
+            uniqueMessages.add("{{ message|escapejs }}"); // 메시지를 Set에 추가
+            {% endfor %}
+            uniqueMessages.forEach(function (message) {
+                alert(message); // 유일한 메시지를 팝업으로 표시
+            });
+            {% endif %}
+        };
+    </script>
+    <style>
+        body {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            background-color: white;
+            /* 배경 색상 */
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            /* 플렉스 박스 사용 */
+            flex-direction: column;
+            /* 세로 방향으로 정렬 */
+            align-items: center;
+            /* 가로 방향 중앙 정렬 */
+        }
+
+        h1 {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            color: #FFCD4A;
+            /* 제목 색상 */
+            text-align: center;
+        }
+
+        .levelup-header {
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            margin-bottom: 20px;
+            /* 아래쪽 여백 */
+            list-style: none;
+            /* 기본 리스트 스타일 제거 */
+            padding: 0;
+            /* 패딩 제거 */
+        }
+
+        .levelup-header li {
+            margin-bottom: 10px;
+            /* 각 li 사이의 간격 설정 */
+        }
+
+        .level-up-row {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            display: flex;
+            /* 플렉스 레이아웃 사용 */
+            justify-content: space-around;
+            /* 간격을 균등하게 배치 */
+            width: 100%;
+            /* 너비 100% */
+            max-width: 800px;
+            /* 최대 너비 설정 */
+            margin: 20px auto;
+            /* 중앙 정렬 */
+        }
+
+        .level-up-row-before,
+        .level-up-row-after {
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+            display: flex;
+            /* 플렉스 레이아웃 사용 */
+            flex-direction: column;
+            /* 세로 방향으로 정렬 */
+            align-items: center;
+            /* 가로 방향 중앙 정렬 */
+            margin: 0 10px;
+            /* 좌우 간격 */
+        }
+
+        .card {
+            border: 1px solid #52d6f5;
+            /* 포인트 컬러로 테두리 설정 */
+            border-radius: 5px;
+            /* 카드 모서리 둥글게 */
+            padding: 10px;
+            /* 카드 내부 여백 */
+            background-color: #fafab9;
+            /* 메인 컬러로 배경 설정 */
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            transition: box-shadow 0.3s;
+            /* 그림자 효과 */
+            margin: 5px 0;
+            /* 카드 간격 */
+            width: 120px;
+            /* 고정된 너비 설정 */
+            padding: 15px;
+            /* 내부 패딩 추가 */
+            height: 60px;
+        }
+
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            /* 마우스 오버 시 그림자 효과 */
+        }
+
+        .menu {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .menu a {
+            color: #52d6f5;
+            /* 포인트 색상 */
+            text-decoration: none;
+            margin: 0 10px;
+            /* 좌우 간격 */
+        }
+
+        .menu a:hover {
+            text-decoration: underline;
+        }
+
+        .level-up-row {
+            display: grid;
+            /* 그리드 레이아웃 사용 */
+            grid-template-columns: repeat(3, 1fr);
+            /* 3열로 설정 */
+            gap: 20px;
+            /* 열 간격 설정 */
+            max-width: 800px;
+            /* 최대 너비 설정 */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>레벨업 페이지</h1>
+    <ul class="levelup-header">
+        <li>{{ character.character_name }}</li>
+        <li>경험치 {{ current_experience }}/{{ required_experience }}</li>
+        <li><a href="{% url '레벨업 하기' %}">레벨업 하기</a></li>
+    </ul>
+
+
+
+    <div class="level-up-row">
+        <div class="level-up-row-before">
+            <h2>레벨업 전 정보</h2>
+            <div class="card">
+                <p>레벨: {{ before_level }}</p>
+            </div>
+            <div class="card">
+                <p>체력: {{ before_health }}</p>
+            </div>
+            <div class="card">
+                <p>공격력: {{ before_attack_power }}</p>
+            </div>
+            <div class="card">
+                <p>방어력: {{ before_defense }}</p>
+            </div>
+        </div>
+
+        <div class="level-up-row-right" style="margin-top: 250px; margin-left: 50px;"> <!-- 이미지 상단 마진 추가 -->
+            <img src="https://cdn-icons-png.flaticon.com/512/724/724865.png" alt="레벨업 이미지"
+                style="width: 100%; max-width: 150px;"> <!-- 이미지 추가 -->
+        </div>
+
+
+        <div class="level-up-row-after">
+            <h2>레벨업 후 정보</h2>
+            <div class="card">
+                <p>레벨: {{ after_level }}</p>
+            </div>
+            <div class="card">
+                <p>체력: {{ after_health }}</p>
+            </div>
+            <div class="card">
+                <p>공격력: {{ after_attack_power }}</p>
+            </div>
+            <div class="card">
+                <p>방어력: {{ after_defense }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="menu">
+        <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+        <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+        <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+        <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+        {% if daily_mission_cleared %}
+        <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+        {% else %}
+        <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+        {% endif %}
+        <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+    </div>
+</body>
+
+</html>

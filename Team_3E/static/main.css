@@ -1,0 +1,67 @@
+/* 전체적인 바디 스타일 */
+body {
+    font-family: 'Arial', sans-serif; /* 폰트 설정 */
+    line-height: 1.6; /* 줄 간격 설정 */
+    margin: 0;
+    padding: 20px; /* 상하좌우 여백 */
+    background-color: #f9f9f9; /* 배경 색상 */
+    color: #333; /* 기본 글자 색상 */
+    display: flex; /* 플렉스 박스 사용 */
+    flex-direction: column; /* 세로 방향으로 배치 */
+    align-items: center; /* 수평 중앙 정렬 */
+    justify-content: center; /* 수직 중앙 정렬 */
+    height: 100vh; /* 화면 전체 높이 사용 */
+}
+
+/* 제목 스타일 */
+h2 {
+    color: #4A90E2; /* 제목 색상 */
+    margin-bottom: 30px; /* 제목과 콘텐츠 간격 */
+    text-align: center; /* 제목 중앙 정렬 */
+}
+
+/* 링크 스타일 */
+a {
+    color: #4A90E2; /* 링크 색상 */
+    text-decoration: none; /* 링크의 밑줄 제거 */
+    margin: 0 15px; /* 좌우 여백 */
+    padding: 8px 15px; /* 상하좌우 여백 */
+    border-radius: 5px; /* 둥근 모서리 */
+    transition: background-color 0.3s, color 0.3s; /* 배경 색상 및 글자 색상 변환 효과 */
+}
+
+/* 링크에 마우스 오버 효과 */
+a:hover {
+    background-color: #4A90E2; /* 호버 시 배경 색상 */
+    color: #fff; /* 호버 시 글자 색상 */
+}
+
+/* 버튼 스타일 */
+.btn {
+    background-color: #4A90E2; /* 버튼 배경 색상 */
+    color: #fff; /* 버튼 글자 색상 */
+    padding: 10px 20px; /* 버튼 상하좌우 여백 */
+    border: none; /* 기본 테두리 제거 */
+    border-radius: 5px; /* 둥근 모서리 */
+    cursor: pointer; /* 커서 포인터로 변경 */
+    font-size: 16px; /* 버튼 글자 크기 */
+    transition: background-color 0.3s; /* 배경 색상 변환 효과 */
+}
+
+/* 버튼 호버 효과 */
+.btn:hover {
+    background-color: #357ABD; /* 호버 시 버튼 색상 */
+}
+
+/* 사용자 메시지 스타일 */
+.welcome-message {
+    margin: 20px 0; /* 상하 여백 */
+    font-size: 18px; /* 글자 크기 */
+    color: #555; /* 글자 색상 */
+}
+
+/* 로그아웃 및 내 계정 링크 스타일 */
+.logout-links {
+    margin-top: 20px; /* 상단 여백 */
+    text-align: center; /* 중앙 정렬 */
+}

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미션 완료 달력</title>
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            /* 배경 색상 */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #FFCD4A;
+            /* 제목 색상 */
+            text-align: center;
+        }
+
+        #calendar {
+            max-width: 900px;
+            margin: 40px auto;
+            background-color: #fffff9;
+            /* 메인 컬러 */
+            padding: 20px;
+            /* 여백 추가 */
+            border-radius: 5px;
+            /* 둥근 모서리 */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            /* 그림자 효과 */
+        }
+
+        .menu {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .menu a {
+            color: #52d6f5;
+            /* 포인트 색상 */
+            text-decoration: none;
+            margin: 0 10px;
+            /* 좌우 간격 */
+        }
+
+        .menu a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="{% url '마이페이지' %}">뒤로가기</a>
+    <h1>미션 완료 달력</h1>
+
+    <!-- 달력 표시 영역 -->
+    <div id="calendar"></div>
+
+    <!-- 미션 완료 날짜를 JS로 전달 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+            var events = [];
+
+            {% for completion in completions %}
+            events.push({
+                title: '미션 완료',
+                start: '{{ completion.completion_date|date:"Y-m-d" }}'  // 날짜 형식 변환
+            });
+            {% endfor %}
+
+            console.log(events);  // 이벤트 데이터 콘솔에서 확인
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                events: events  // 배열을 통해 이벤트 추가
+            });
+            calendar.render();
+        });
+    </script>
+
+    <div class="menu">
+        <a href="{% url '랭킹' %}">랭킹</a>
+        <a href="{% url '친구' %}">친구</a>
+        <a href="{% url '게임_메인' %}">홈</a>
+        <a href="{% url '도전' %}">도전</a>
+        <a href="{% url '상점' %}">상점</a>
+    </div>
+</body>
+
+</html>

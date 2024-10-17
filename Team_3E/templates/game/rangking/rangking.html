@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>랭킹</title>
+    <style>
+        /* 기존 스타일 유지 */
+        body {
+            background-color: white; /* 배경 색상을 흰색으로 설정 */
+            display: flex;
+            flex-direction: column; /* 수직 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            height: 100vh; /* 전체 화면 높이 사용 */
+            margin: 0; /* 기본 여백 제거 */
+            font-family: 'Pretendard', sans-serif; /* Pretendard 폰트 적용 */
+        }
+    
+        h1 {
+            margin-bottom: 10px; /* 제목과 항목 간격 */
+            color: #FFCD4A; /* 글자색을 #FFCD4A로 설정 */
+        }
+    
+        .ranking-menu {
+            display: flex; /* 가로 정렬 */
+            gap: 30px; /* 항목 간 간격 */
+            margin-bottom: 20px; /* 메뉴와 테이블 간격 */
+        }
+    
+        .ranking-menu a {
+            color: #52d6f5; /* 기본 글자 색상 */
+            text-decoration: none; /* 기본 밑줄 제거 */
+            padding: 10px 15px; /* 패딩 추가 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            transition: background-color 0.3s, color 0.3s; /* 효과 전환 */
+        }
+    
+        .ranking-menu a:hover {
+            background-color: #fafab9; /* 호버 시 배경 색상 */
+            color: #52d6f5; /* 호버 시 글자 색상 유지 */
+        }
+    
+        table {
+            border-collapse: collapse; /* 테이블 테두리 병합 */
+            margin-top: 10px; /* 테이블과 링크 간격 */
+            width: 50%; /* 테이블 폭 */
+        }
+    
+        th, td {
+            border: 1px solid #ddd; /* 테두리 추가 */
+            padding: 8px; /* 셀 패딩 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+        }
+    
+        th {
+            background-color: #fafab9; /* 서브 색상 */
+            color: #838383; /* 글자색을 #FFCD4A로 설정 */
+        }
+    
+        .bold {
+            font-weight: bold; /* 볼드 처리 */
+        }
+    
+        .top-ranking {
+            background-color: #ffffe9; /* 상위 3위 배경 색상 */
+        }
+    
+        .gray {
+            color: #888888; /* 회색 */
+        }
+    
+        /* 캐릭터 정보 스타일 */
+        .character-info {
+            visibility: hidden; /* 기본적으로 숨김 */
+            position: absolute; /* 절대 위치 */
+            background-color: rgba(255, 255, 255, 0.5); /* 배경 색상 흰색 + 50% 투명도 */
+            border: 1px solid #ddd; /* 테두리 */
+            padding: 10px; /* 패딩 */
+            z-index: 100; /* 다른 요소보다 앞에 */
+            width: 100px; /* 너비 조정 */
+            font-size: 15px; /* 글자 크기 12px로 조정 */
+            left: 250px; /* 오른쪽 마진 추가 */
+            bottom: 0.5px;
+            transform: translateX(-20px); /* 왼쪽으로 20px 이동 */
+            opacity: 0; /* 초기 투명도 */
+            transition: transform 0.3s ease, opacity 0.3s ease, visibility 0.3s ease; /* 모션 효과 */
+        }
+    
+        .character-name {
+            position: relative; /* 부모 요소에 대해 상대 위치 */
+        }
+    
+        /* 캐릭터 이름에 호버 시 정보 표시 */
+        .character-name:hover .character-info {
+            visibility: visible; /* 호버 시 보이기 */
+            transform: translateX(0); /* 원래 위치로 돌아오기 */
+            opacity: 1; /* 완전 불투명 */
+        }
+        /* 방문하기 링크 스타일 */
+        .visit-link {
+            color: #52d6f5; /* 기본 색상 */
+            text-decoration: none; /* 기본 밑줄 제거 */
+            transition: text-decoration 0.3s ease; /* 호버 시 전환 효과 */
+        }
+
+        .visit-link:hover {
+            text-decoration: underline; /* 호버 시 밑줄 추가 */
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 10px;
+            text-decoration: none;
+        }
+    
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+        
+    
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+    
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+        .level-info {
+            color: #ffbf1c; /* 원하는 색상으로 변경 */
+        }
+        .nickname-visit-link {
+            color: inherit; /* 부모 요소의 색상을 상속받음 */
+            text-decoration: none; /* 기본 밑줄 제거 */
+        }
+
+        .nickname-visit-link:hover {
+            color: #52d6f5; /* 호버 시 색상 변경 */
+            text-decoration: underline; /* 호버 시 밑줄 추가 */
+        }
+
+        
+    </style>
+    
+</head>
+<body>
+    <h1>랭킹</h1>
+    <br>
+    <div class="ranking-menu">
+        <a href="{% url '랭킹' %}">레벨랭킹</a>
+        <a href="{% url '도전랭킹' %}">도전랭킹</a>
+    </div>
+    <table>
+        {% if characters %}
+        <tr>
+            <th>순위</th>
+            <th>닉네임</th>
+            <th>레벨</th>
+            <th>캐릭터명</th>
+        </tr>
+        {% for character in characters %}
+        <tr class="div-visit {% if forloop.counter <= 3 %}top-ranking{% endif %}">
+            <td class="{% if forloop.counter <= 3 %}bold{% else %}gray{% endif %}">
+                {{ forloop.counter }} {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% endif %}
+            </td>
+            <td class="{% if forloop.counter <= 3 %}bold{% else %}gray{% endif %}">
+                <a href="{% url '랭킹_방문하기' character.id %}" class="nickname-visit-link">
+                    {{ character.user.name }} ({{ character.user.user_id|slice:":4" }}***)
+                </a>
+                {% if character.user.user_id == user.user_id %}
+                    <span style="color: red; font-size: 12px;">(나의 순위)</span>
+                {% endif %}
+            </td>
+            <td class="{% if forloop.counter <= 3 %}bold level-ranking{% else %}gray{% endif %}">{{ character.level }}</td>
+            <td class="{% if forloop.counter <= 3 %}bold{% else %}gray{% endif %} character-name">
+                {{ character.character_name }}
+                <div class="character-info">
+                    <p class="level-info">레벨: {{ character.level }}</p>
+                    <p>공격력: {{ character.attack_power }}</p>
+                    <p>방어력: {{ character.defense }}</p>
+                    <p>체력: {{ character.health }}</p>
+                </div>                
+            </td>
+        </tr>        
+        {% endfor %}
+        {% endif %}
+        
+        <!-- 도전랭킹 -->
+        {% if users %}
+        <tr>
+            <th>순위</th>
+            <th>닉네임</th>
+            <th>도달한 층수</th>
+        </tr>
+        {% for user in users %}
+        <tr class="div-visit {% if forloop.counter <= 3 %}top-ranking{% endif %}">
+            <td class="{% if forloop.counter <= 3 %}bold{% else %}gray{% endif %}">
+                {{ forloop.counter }} {% if forloop.counter == 1 %}🥇{% elif forloop.counter == 2 %}🥈{% elif forloop.counter == 3 %}🥉{% endif %}
+            </td>
+            <td class="{% if forloop.counter <= 3 %}bold{% else %}gray{% endif %}">
+                <a href="{% url '도전랭킹_방문하기' user.id %}" class="nickname-visit-link">
+                    {{ user.name }} ({{ user.user_id|slice:":4" }}***)
+                </a>
+                {% if user.user_id == request.user.user_id %}
+                    <span style="color: red; font-size: 12px;">(나의 순위)</span>
+                {% endif %}
+            </td>
+            <td class="{% if forloop.counter <= 3 %}bold challenge-ranking{% else %}gray{% endif %}">{{ user.challenge_level }}</td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+    </table>
+    
+    <br>
+    <footer>
+        <div class="menu">
+            <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+            <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+            <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+            <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+            {% if daily_mission_cleared %}
+                <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+            {% else %}
+                <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+            {% endif %}
+            <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+        </div>
+    </footer>
+</body>
+</html>

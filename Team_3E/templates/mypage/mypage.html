@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>마이페이지</title>
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+    <!-- Pretendard 폰트 링크 추가 -->
+    <style>
+        body {
+            font-family: 'Pretendard Variable', Pretendard, Arial, sans-serif;
+            /* 프리텐다드 폰트 사용 */
+            background-color: white;
+            /* 배경 색상 */
+            margin: 0;
+            padding: 20px;
+        }
+
+        h2 {
+            color: #FFCD4A;
+            /* 제목 색상 */
+            text-align: center;
+        }
+
+        a {
+            color: #52d6f5;
+            /* 포인트 색상 */
+            text-decoration: none;
+            font-size: 18px;
+            /* 글자 크기 조정 */
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .mypage-list {
+            text-align: center;
+            /* 중앙 정렬 */
+            margin: 60px 0;
+            /* 상하 간격 */
+        }
+
+        .mypage-list a {
+            color: #52d6f5;
+            /* 포인트 색상 */
+            text-decoration: none;
+            display: block;
+            /* 블록 형태로 변경하여 줄바꿈 처리 */
+            margin: 10px 0;
+            /* 각 링크 간의 상하 간격 */
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .menu {
+            display: flex;
+            /* Flexbox 사용 */
+            justify-content: center;
+            /* 중앙 정렬 */
+            margin-top: 20px;
+        }
+
+        .menu a {
+            margin: 0 10px;
+            /* 좌우 간격 */
+            font-size: 24px;
+            /* 버튼 글자 크기 조정 */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>마이페이지</h2>
+    <div class="mypage-list">
+        <a href="{% url '회원정보수정 페이지' %}">회원 정보 수정</a><br>
+        <a href="{% url '에너지 절약량 확인페이지' %}">에너지 절약량 확인</a><br>
+        <a href="{% url '일일 미션 출석부 페이지' %}">일일 미션 출석부</a>
+    </div>
+
+    <div class="menu">
+        <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+        <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+        <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+        <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+        {% if daily_mission_cleared %}
+        <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+        {% else %}
+        <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+        {% endif %}
+        <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+    </div>
+</body>
+
+</html>

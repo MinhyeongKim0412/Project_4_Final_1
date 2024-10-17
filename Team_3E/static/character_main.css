@@ -1,0 +1,33 @@
+.character-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.character-list ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.character-list li {
+    display: inline-block;
+    margin: 10px;
+}
+
+.character-list img {
+    width: 100px;
+    height: 100px;
+}
+
+.icon-menu {
+    margin-top: 20px;
+}
+
+.icon-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.icon-menu li {
+    display: inline-block;
+    margin: 0 10px;
+}

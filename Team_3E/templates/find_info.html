@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디 및 비밀번호 찾기</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        body {
+            background-color: #f9f9f9; /* 배경 색상 */
+            font-family: 'Pretendard', sans-serif; /* 폰트 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* 화면 전체 높이 */
+            margin: 0; /* 기본 여백 제거 */
+        }
+
+        .container {
+            background-color: white; /* 내용 영역 배경 색상 */
+            padding: 40px; /* 내부 패딩 여유롭게 조정 */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 400px; /* 내용 영역 폭 늘리기 */
+        }
+
+        h2 {
+            text-align: center; /* 제목 중앙 정렬 */
+            margin-bottom: 20px; /* 제목과 내용 간격 */
+            color: #FFCD4A; /* 제목 색상 */
+        }
+
+        .form-group {
+            margin-bottom: 30px; /* 항목 간 간격 조정 */
+        }
+
+        input[type="text"], input[type="email"] {
+            width: 100%; /* 입력 필드 너비 */
+            padding: 10px; /* 입력 필드 패딩 */
+            border: 1px solid #ddd; /* 테두리 색상 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            box-sizing: border-box; /* 박스 크기 조정 */
+            font-family: 'Pretendard', sans-serif; /* 입력 필드 폰트 설정 */
+        }
+
+        input::placeholder { /* 플레이스홀더 폰트 설정 */
+            font-family: 'Pretendard', sans-serif; /* 플레이스홀더 폰트 */
+        }
+
+        button {
+            width: 100%; /* 버튼 너비 */
+            padding: 10px; /* 버튼 패딩 */
+            background-color: #52d6f5; /* 버튼 배경 색상 */
+            border: none; /* 테두리 제거 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            color: white; /* 글자 색상 */
+            font-size: 16px; /* 글자 크기 */
+            cursor: pointer; /* 마우스 커서 변경 */
+            font-family: 'Pretendard', sans-serif; /* 버튼 폰트 설정 */
+        }
+
+        button:hover {
+            background-color: #48c1e5; /* 호버 시 버튼 색상 변화 */
+        }
+
+        .links {
+            text-align: center; /* 링크 중앙 정렬 */
+            margin-top: 20px; /* 링크와 버튼 간격 */
+        }
+
+        .links a {
+            text-decoration: none; /* 밑줄 제거 */
+            color: #52d6f5; /* 링크 색상 */
+            margin: 0 10px; /* 링크 간격 */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>아이디 및 비밀번호 찾기</h2>
+
+        <!-- 아이디 찾기 섹션 -->
+        <div class="form-group">
+            <h3>아이디 찾기</h3>
+            <input type="text" id="find-id-name" placeholder="이름">
+            <input type="email" id="find-id-email" placeholder="이메일">
+            <button id="find-id-button">아이디 찾기</button>
+        </div>
+
+        <!-- 비밀번호 찾기 섹션 -->
+        <div class="form-group">
+            <h3>비밀번호 찾기</h3>
+            <input type="text" id="find-pw-id" placeholder="아이디">
+            <input type="email" id="find-pw-email" placeholder="이메일">
+            <button id="find-pw-button">비밀번호 찾기</button>
+        </div>
+
+        <!-- 링크 섹션 -->
+        <div class="links">
+            <a href="{% url '홈페이지' %}">홈페이지</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('find-id-button').addEventListener('click', findId);
+        document.getElementById('find-pw-button').addEventListener('click', findPw);
+
+        async function findId() {
+            const name = document.getElementById('find-id-name').value;
+            const email = document.getElementById('find-id-email').value;
+
+            const response = await fetch('/find_id/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // CSRF 토큰 추가
+                },
+                body: JSON.stringify({ name, email }),
+            });
+
+            const data = await response.json();
+            alert(data.message); // 서버 응답 메시지 출력
+        }
+
+        async function findPw() {
+            const id = document.getElementById('find-pw-id').value;
+            const email = document.getElementById('find-pw-email').value;
+
+            const response = await fetch('/find_pw/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken'), // CSRF 토큰 추가
+                },
+                body: JSON.stringify({ id, email }),
+            });
+
+            const data = await response.json();
+            alert(data.message); // 서버 응답 메시지 출력
+        }
+
+        // CSRF 토큰을 가져오는 함수
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+.character-detail-container {
+    padding: 20px;
+    text-align: center;
+}
+
+.character-details {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.character-details th, .character-details td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: left;
+}
+
+.icon-menu {
+    margin-top: 20px;
+}
+
+.icon-menu ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.icon-menu li {
+    display: inline-block;
+    margin: 0 10px;
+}

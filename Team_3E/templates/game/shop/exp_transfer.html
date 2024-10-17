@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>경험치 이전 페이지</h1>
+
+<!-- 경험치 이전권 사용 전 -->
+{% if trigger_before %}
+<br>
+<br>
+<h2>현재 캐릭터</h2>
+
+캐릭터 이름: {{ main_character.character_name }}<br>
+레벨: {{ main_character.level }}<br>
+경험치: {{ main_character.total_experience }}<br>
+
+    
+    <h2>다른 캐릭터</h2>
+    
+        경험치를 이전할 캐릭터를 선택하세요
+        <form action="{% url '경험치 이전_액션' %}" method="post">
+            {% csrf_token %}
+            <select name="input_character_id" id="other_character">
+                {% for character in other_characters %}
+                    <option value="{{ character.id }}">{{ character.character_name }} (레벨 {{ character.level }}, 경험치 {{ character.total_experience }})</option>
+                {% endfor %}
+            </select>
+            <button type = "submit">이전하기</button>
+        </form>
+{% endif %}
+
+
+<!-- 경험치 이전권 사용 후 -->
+{% if trigger_after %}
+<br>
+<br>
+<h2>현재 캐릭터</h2>
+
+캐릭터 이름: {{ subject_character.character_name }}<br>
+레벨: {{ subject_character.level }}<br>
+경험치: {{ subject_character.total_experience }}<br>
+
+
+<h2>대상 캐릭터</h2>
+
+캐릭터 이름: {{ object_character.character_name }}<br>
+레벨: {{ object_character.level }}<br>
+경험치: {{ object_character.total_experience }}<br>
+
+{% endif %}
+    <div class="menu">
+        <a href="{% url '랭킹' %}">랭킹</a>
+        <a href="{% url '친구' %}">친구</a>
+        <a href="{% url '게임_메인' %}">홈</a>
+        <a href="{% url '도전' %}">도전</a>
+        <a href="{% url '상점' %}">상점</a>
+    </div>
+</body>
+</html>
+

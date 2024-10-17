@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+    <title>메인 페이지</title>
+    <style>
+        body {
+            background-size: cover;
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            height: 100vh;
+            text-align: center;
+            font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif; /* Pretendard 폰트 적용 */
+            margin: 0; /* 기본 여백 제거 */
+            background-color: #f9f9f9; /* 배경 색상을 밝은 회색으로 설정 */
+        }
+
+        h2 {
+            color: #FFCD4A; /* 메인 색상 */
+            margin: 0 0 20px; /* 상단 마진 제거, 하단 마진 20px 설정 */
+            font-size: 32px; /* h2 크기 설정 */
+        }
+
+        .character-quickbar {
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            gap: 20px; /* 항목 간 간격 설정 */
+            margin: 20px 0; /* 상하 여백 설정 */
+        }
+
+        .character-quickbar a {
+            color: #52d6f5; /* 글자 색상 설정 */
+            text-decoration: none; /* 기본 밑줄 제거 */
+            font-size: 20px; /* 글자 크기 조정 */
+            transition: text-decoration 0.3s; /* 호버 시 부드러운 전환 효과 */
+        }
+
+        .character-quickbar a:hover {
+            text-decoration: underline; /* 호버 시 밑줄 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            position: absolute; /* 화면 하단에 고정 */
+            bottom: 10px; /* 하단 여백 */
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Main</h2>
+
+    {% if request.user.id %}
+        <div>
+            {{ request.user.name }} 님 환영합니다.
+            <br>
+            <div class="character-quickbar">
+                <a href="{% url '로그아웃' %}">로그아웃</a>
+                <a href="{% url '마이페이지' %}">내 계정</a>
+                <a href="{% url '게임_메인' %}">메인</a>
+            </div>
+        </div>
+    {% else %}
+        <div class="character-quickbar">
+            <a href="{% url '회원가입' %}">회원가입</a>
+            <a href="{% url '로그인' %}">로그인</a>
+        </div>
+    {% endif %}
+
+    {% if messages %}
+    <script>
+        window.onload = function() {
+            var uniqueMessages = new Set(); // 중복 제거를 위한 Set 사용
+            {% for message in messages %}
+                uniqueMessages.add("{{ message|escapejs }}"); // 메시지를 Set에 추가
+            {% endfor %}
+            uniqueMessages.forEach(function(message) {
+                alert(message); // 유일한 메시지를 팝업으로 표시
+            });
+        }
+    </script>
+    {% endif %}
+
+</body>
+</html>

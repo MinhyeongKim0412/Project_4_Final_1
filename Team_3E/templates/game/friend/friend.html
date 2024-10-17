@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>친구</title>
+    <script>
+        window.onload = function () {
+            // 메시지를 팝업창으로 표시하기
+            {% if messages %}
+            var uniqueMessages = new Set(); // 중복 제거를 위한 Set 사용
+            {% for message in messages %}
+            uniqueMessages.add("{{ message|escapejs }}"); // 메시지를 Set에 추가
+            {% endfor %}
+            uniqueMessages.forEach(function (message) {
+                alert(message); // 유일한 메시지를 팝업으로 표시
+            });
+            {% endif %}
+        };
+    </script>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            /* 배경 색상을 밝은 회색으로 설정 */
+            font-family: 'Pretendard', sans-serif;
+            /* Pretendard 폰트 적용 */
+            margin: 0;
+            /* 기본 여백 제거 */
+            padding: 20px;
+            /* 본문 여백 추가 */
+            color: #333;
+            /* 기본 텍스트 색상 설정 */
+            font-size: 14px;
+            /* 기본 글자 크기 설정 */
+        }
+
+        h1 {
+            color: #FFCD4A;
+            /* 메인 색상으로 제목 색상 설정 */
+            margin: 20px 0 10px;
+            /* 상단 여백 추가 */
+        }
+
+        h2 {
+            font-size: 30px;
+            /* 제목 2 크기 설정 */
+            color: #FFCD4A;
+            /* 메인 색상으로 제목 색상 설정 */
+            margin: 15px 0;
+            /* 상단 여백 추가 */
+        }
+
+        h3 {
+            font-size: 20px;
+            /* 제목 3 크기 설정 */
+            color: #FFCD4A;
+            /* 메인 색상으로 제목 색상 설정 */
+            margin: 10px 0;
+            /* 상단 여백 추가 */
+        }
+
+        h4,
+        h5,
+        h6 {
+            font-size: 18px;
+            /* 제목 4, 5, 6 크기 설정 */
+            color: #FFCD4A;
+            /* 메인 색상으로 제목 색상 설정 */
+            margin: 5px 0;
+            /* 상단 여백 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 10px;
+            padding: 8px 0;
+            /* 패딩 줄임 */
+        }
+
+        .menu a {
+            position: relative;
+            /* 상대 위치 설정 */
+            display: inline-block;
+            z-index: 1;
+            /* 링크가 말풍선보다 낮은 z-index */
+            margin: 0 10px;
+            /* 좌우 간격을 10px로 설정 */
+            font-size: 30px;
+            /* 글자 크기 줄임 */
+            text-decoration: none;
+            /* 기본 밑줄 제거 */
+        }
+
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            /* 링크 위쪽 위치 */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            /* 맨 앞 레이어로 설정 */
+            font-size: 15px;
+            text-decoration: none;
+            /* 기본 밑줄 제거 */
+        }
+
+        /* 호버 시 말풍선 표시 */
+        .menu a:hover::after {
+            opacity: 1;
+            /* 말풍선 보이기 */
+            visibility: visible;
+            /* 가시성 변경 */
+            font-size: 15px;
+        }
+
+        button {
+            background-color: #52d6f5;
+            /* 포인트 색상으로 버튼 배경 설정 */
+            color: white;
+            /* 버튼 텍스트 색상 설정 */
+            border: none;
+            /* 버튼 테두리 제거 */
+            border-radius: 5px;
+            /* 버튼 모서리 둥글게 설정 */
+            padding: 10px 15px;
+            /* 버튼 내부 여백 설정 */
+            cursor: pointer;
+            /* 버튼 커서 변경 */
+            transition: background-color 0.3s;
+            /* 배경색 변화에 부드러운 전환 효과 추가 */
+            font-size: 16px;
+            /* 버튼 글자 크기 설정 */
+        }
+
+        button:hover {
+            background-color: #49c8e0;
+            /* 포인트 색상 변형으로 호버 시 배경색 변경 */
+        }
+
+        .user-list a {
+            text-decoration: none;
+            /* 기본 밑줄 제거 */
+            color: #52d6f5;
+            /* 기본 글자 색상 */
+        }
+
+        .user-list a:hover {
+            text-decoration: underline;
+            /* 호버 시 밑줄 추가 */
+        }
+
+        .user-list {
+            display: flex;
+            /* Flexbox 사용하여 가로 정렬 */
+            flex-direction: column;
+            /* 세로 방향으로 정렬 */
+            gap: 15px;
+            /* 각 사용자 항목 사이의 간격 */
+            width: 30%;
+            /* 너비 설정 */
+            padding: 0 50px;
+            /* 좌우 패딩 추가 (좌우 각각 20px) */
+            margin: 20px auto;
+            /* 위쪽 및 아래쪽 여백 추가 (예: 20px), 가운데 정렬 */
+        }
+
+        .user-item {
+            display: flex;
+            /* Flexbox 사용하여 가로 정렬 */
+            justify-content: space-between;
+            /* 아이템 간의 공간 분배 */
+            align-items: center;
+            /* 수직 중앙 정렬 */
+            padding: 10px;
+            /* 패딩 추가 */
+            background-color: #ffffe9;
+            /* 서브 색상으로 배경 설정 */
+            border-radius: 5px;
+            /* 모서리 둥글게 설정 */
+        }
+
+        .header_info {
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            margin-bottom: 20px;
+            /* 아래쪽 여백 추가 */
+        }
+
+        .header_info a {
+            color: #52d6f5;
+            /* 기본 글자 색상 */
+            text-decoration: none;
+            /* 기본 밑줄 제거 */
+            padding: 10px 15px;
+            /* 패딩 추가 */
+            border-radius: 5px;
+            /* 모서리 둥글게 */
+            transition: background-color 0.3s, color 0.3s;
+            /* 효과 전환 */
+            font-size: 15px;
+        }
+
+        .header_info a:hover {
+            background-color: #fafab9;
+            /* 호버 시 배경 색상 */
+            color: #52d6f5;
+            /* 호버 시 글자 색상 유지 */
+        }
+
+        form {
+            display: flex;
+            /* Flexbox 사용하여 내부 요소 정렬 */
+            flex-direction: column;
+            /* 세로 방향으로 정렬 */
+            align-items: center;
+            /* 수평 중앙 정렬 */
+            gap: 10px;
+            /* 입력 필드와 버튼 간의 간격 */
+            margin-top: 20px;
+            /* 상단 여백 추가 */
+        }
+
+        input[type="text"] {
+            font-family: 'Pretendard', sans-serif;
+            /* Pretendard 폰트 적용 */
+            padding: 10px;
+            /* 입력 필드 패딩 */
+            border: 1px solid #ccc;
+            /* 테두리 색상 */
+            border-radius: 5px;
+            /* 테두리 모서리 둥글게 */
+            width: 100%;
+            /* 너비를 100%로 설정 */
+            max-width: 300px;
+            /* 최대 너비 설정 */
+            font-size: 14px;
+            /* 입력 필드 글자 크기 설정 */
+        }
+
+        button {
+            font-family: 'Pretendard', sans-serif;
+            /* Pretendard 폰트 적용 */
+            padding: 10px 15px;
+            /* 버튼 패딩 */
+            background-color: #FFCD4A;
+            /* 버튼 배경색 */
+            color: white;
+            /* 버튼 글자색 */
+            border: none;
+            /* 테두리 제거 */
+            border-radius: 5px;
+            /* 테두리 모서리 둥글게 */
+            cursor: pointer;
+            /* 마우스 커서를 포인터로 변경 */
+            transition: background-color 0.3s;
+            /* 배경색 전환 효과 */
+            font-size: 16px;
+            /* 버튼 글자 크기 설정 */
+        }
+
+        button:hover {
+            background-color: #42b1e0;
+            /* 마우스 오버 시 배경색 변경 */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="header_info">
+        <h2>친구</h2>
+        <a href="{% url '친구' %}">친구 목록</a>
+        <a href="{% url '유저 검색 칸' %}">유저 검색</a>
+    </div>
+
+    <div class="user-list">
+        {% if friends %}
+        {% for friend in friends %}
+        <div class="user-item">
+            아이디: {{ friend.friend.user_id }}<br>
+            이름: {{ friend.friend.name }}<br>
+            <a href="{% url '방문하기' friend.friend.id %}">방문하기</a>
+            <a href="{% url '친구 삭제' friend.friend.id %}">삭제하기</a>
+            <a href="{% url '친구에게 도전' friend.friend.id %}">도전하기</a>
+        </div>
+        <br>
+        {% endfor %}
+        {% else %}
+        {% endif %}
+    </div>
+
+    {% if trigger or users %}
+    <form action="{% url '유저 검색' %}" method="post">
+        {% csrf_token %}
+        <input type="text" name="input_user_id" placeholder="유저 아이디 입력">
+        <button type="submit">검색하기</button>
+    </form>
+    {% endif %}
+
+    {% if users %}
+    <div class="user-list">
+        {% for user in users %}
+        <div class="user-item">
+            아이디: {{ user.user_id }}<br>
+            이름: {{ user.name }}<br>
+            <a href="{% url '친구 신청' user.id %}">친구신청</a>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if requests %}
+    {% for request in requests %}
+    {{ request.connected_user.user_id }} 님의 친구신청<a href="{% url '친구 수락' request.connected_user.id %}">수락하기</a>
+    {% endfor %}
+    {% endif %}
+
+    <footer>
+        <div class="menu">
+            <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+            <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+            <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+            <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+            {% if daily_mission_cleared %}
+                <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+            {% else %}
+                <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+            {% endif %}
+            <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+        </div>
+    </footer>
+</body>
+
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>친구와의 배틀</title>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif; /* Pretendard 폰트 적용 */
+            background-color: #f9f9f9; /* 배경 색상을 밝은 회색으로 설정 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            margin: 0; /* 기본 여백 제거 */
+            padding: 20px; /* 패딩 추가 */
+        }
+
+        h1 {
+            color: #FFCD4A; /* 제목 색상 */
+            margin-bottom: 20px; /* 제목과 내용 간격 */
+        }
+
+        .battle-container {
+            display: flex; /* 가로 정렬 */
+            justify-content: space-around; /* 요소 간 간격 */
+            margin-top: 20px; /* 상단 여백 */
+        }
+
+        .character {
+            text-align: center; /* 캐릭터 텍스트 중앙 정렬 */
+        }
+
+        .log-container {
+            width: 90%; /* 로그 박스의 너비 */
+            max-width: 400px; /* 최대 너비 제한 */
+            height: 200px; /* 높이 설정 */
+            overflow-y: auto; /* 세로 스크롤 */
+            margin: 20px auto; /* 중앙 정렬 */
+            padding: 10px; /* 패딩 추가 */
+            background-color: #fafab9; /* 서브 색상 */
+            border: 1px solid #ddd; /* 테두리 추가 */
+            border-radius: 5px; /* 모서리 둥글게 */
+        }
+
+        .log-box {
+            padding: 10px; /* 셀 패딩 */
+            border-bottom: 1px solid #ccc; /* 하단 테두리 */
+        }
+
+        .attack-form {
+            margin-top: 20px; /* 상단 여백 */
+        }
+
+        .character img {
+            width: 100px; /* 이미지 폭 */
+            height: auto; /* 비율 유지 */
+            margin-top: 10px; /* 상단 여백 */
+        }
+
+        .result-message {
+            margin-top: 30px; /* 상단 여백 */
+            font-size: 24px; /* 폰트 크기 */
+            font-weight: bold; /* 두껍게 */
+            color: green; /* 승리 색상 */
+        }
+
+        .result-message.fail {
+            color: red; /* 패배 색상 */
+        }
+
+        .action-buttons {
+            margin-top: 20px; /* 상단 여백 */
+        }
+
+        .action-buttons a {
+            display: inline-block; /* 블록 요소로 설정 */
+            margin: 0 10px; /* 좌우 간격 */
+            padding: 10px 15px; /* 내부 여백 */
+            background-color: #52d6f5; /* 버튼 색상 */
+            color: white; /* 텍스트 색상 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            text-decoration: none; /* 밑줄 제거 */
+            transition: background-color 0.3s; /* 호버 효과 전환 */
+        }
+
+        .action-buttons a:hover {
+            background-color: #3bb1d1; /* 호버 시 색상 변화 */
+        }
+
+        button {
+            background-color: #52d6f5; /* 버튼 색상 */
+            color: white; /* 버튼 텍스트 색상 */
+            border: none; /* 테두리 없음 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px 15px; /* 내부 여백 */
+            cursor: pointer; /* 커서 포인터로 변경 */
+            margin-top: 10px; /* 버튼과 상단 요소 간격 */
+            transition: background-color 0.3s; /* 효과 전환 */
+        }
+
+        button:hover {
+            background-color: #3bb1d1; /* 호버 시 색상 변화 */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 승리 또는 패배 메시지 표시 영역 -->
+    {% if battle_result == 'win' %}
+        <div class="result-message">
+            축하합니다! 전투에서 승리했습니다!
+        </div>
+        <a href="{% url '게임_메인' %}">홈으로 이동</a>
+    {% elif battle_result == 'lose' %}
+        <div class="result-message fail">
+            아쉽게도 패배했습니다.
+        </div>
+        <div style="margin-top: 20px;">
+            <div class="action-buttons">
+                <a href="{% url '친구에게 도전_초기화' friend_character.id %}">다시 시도하기</a>
+                <a href="{% url '게임_메인' %}">홈으로 이동</a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="battle-container">
+        <div class="character">
+            <h3>{{ player_name }}</h3>
+            <p>HP: {{ player_hp }}</p>
+            <p>공격력: {{ main_character.attack_power }}</p>
+            <p>방어력: {{ main_character.defense }}</p>
+            <img src="플레이어 이미지 URL" alt="플레이어 이미지">
+        </div>
+
+        <div class="character">
+            <h3>{{ opponent_name }}</h3>
+            <p>상대방 HP: {{ opponent_hp }}</p>
+            <p>공격력: {{ friend_character.attack_power }}</p>
+            <p>방어력: {{ friend_character.defense }}</p>
+            <img src="상대방 이미지 URL" alt="상대방 이미지">
+        </div>
+    </div>
+
+    <div class="log-container" id="log-container">
+        {% for log in battle_logs %}
+        <div class="log-box">
+            {{ log }}
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="attack-form">
+        {% if battle_result is None %}
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" name="attack_type" value="attack">공격하기</button>
+            </form>
+        {% endif %}
+    </div>
+
+</body>
+</html>

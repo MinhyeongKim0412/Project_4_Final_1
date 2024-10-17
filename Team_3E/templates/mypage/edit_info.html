@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원정보 수정</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css"> <!-- 프리텐다드 폰트 링크 추가 -->
+    <style>
+        body {
+            font-family: 'Pretendard Variable', Pretendard, Arial, sans-serif; /* 프리텐다드 폰트 사용 */
+            background-color: white; /* 배경 색상 */
+            margin: 0;
+            padding: 20px; 
+        }
+        h1 {
+            color: #FFCD4A; /* 제목 색상 */
+            text-align: center; 
+        }
+        form {
+            background-color: #ffffed; /* 메인 컬러 */
+            border-radius: 5px; 
+            padding: 20px; 
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+            max-width: 400px; 
+            margin: auto; 
+            display: flex; /* Flexbox 사용 */
+            flex-direction: column; /* 세로 방향 정렬 */
+            align-items: center; /* 중앙 정렬 */
+        }
+        .input-container {
+            display: flex;
+            flex-direction: column; /* 세로 방향으로 정렬 */
+            align-items: center; /* 가로 방향 중앙 정렬 */
+            max-width: 400px; /* 최대 너비 설정 */
+            margin: auto; /* 자동으로 마진 설정하여 가운데 정렬 */
+        }
+    
+        .input-container ul {
+            width: 80%; /* ul 너비를 100%로 설정 */
+            text-align: left; /* 텍스트 정렬을 왼쪽으로 설정 */
+        }
+        .input-container input {
+            width: 80%; /* 입력 필드 너비를 80%로 설정 */
+            padding: 10px; /* 패딩 추가 */
+            margin: 10px 0; /* 위아래 여백 설정 */
+            margin-left: 10%; /* 왼쪽으로 10% 이동 */
+            border: 1px solid #ccc; /* 테두리 설정 */
+            border-radius: 4px; /* 모서리 둥글게 */
+        }
+        
+        input[type="text"], 
+        input[type="email"], 
+        input[type="password"] {
+            width: calc(100% - 22px); 
+            padding: 10px; 
+            margin: 10px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            font-family: 'Pretendard Variable', Pretendard, Arial, sans-serif; /* 프리텐다드 폰트 사용 */
+        }
+        button {
+            background-color: #52d6f5; /* 포인트 색상 */
+            color: white; 
+            border: none; 
+            padding: 10px 15px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-family: 'Pretendard Variable', Pretendard, Arial, sans-serif; /* 프리텐다드 폰트 사용 */
+        }
+        button:hover {
+            background-color: #007bff; 
+        }
+        .button-container ul a {
+            color: #52d6f5; /* 기본 색상 */
+            text-decoration: none; /* 기본 밑줄 없음 */
+            transition: text-decoration 0.3s; /* 호버 시 애니메이션 효과 */
+            margin-top: 30px; /* 상단 여백 */
+            margin-right: 30px; /* 우측 여백 */
+        }
+        
+        .button-container ul a:hover {
+            text-decoration: underline; /* 호버 시 밑줄 추가 */
+        }
+        
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 10px;
+            background-color: #fff;
+            padding: 8px 0; /* 패딩 줄임 */
+            text-decoration: none;
+        }
+        .menu a {
+            position: relative; /* 상대 위치 설정 */
+            display: inline-block;
+            z-index: 1; /* 링크가 말풍선보다 낮은 z-index */
+            margin: 0 10px; /* 좌우 간격을 10px로 설정 */
+            text-decoration: none;
+        }
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%; /* 링크 위쪽 위치 */
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0; 
+            visibility: hidden; 
+            transition: opacity 0.3s, visibility 0.3s; 
+            z-index: 1000; /* 맨 앞 레이어로 설정 */
+        }
+        /* 호버 시 말풍선 표시 */
+        .menu a:hover::after {
+            opacity: 1; /* 말풍선 보이기 */
+            visibility: visible; /* 가시성 변경 */
+        }
+        .button-container {
+            margin-top: 20px; /* 버튼과 입력란 간의 간격 */
+            display: flex; /* Flexbox 사용 */
+            justify-content: space-between; /* 버튼 간의 간격을 균등하게 배치 */
+            width: 100%; /* 전체 너비 설정 */
+            margin-left: 250px;
+        }
+    </style>
+</head>
+<body>
+    <a href="{% url '마이페이지' %}">뒤로가기</a>
+    <h1>회원정보 수정</h1>
+    <form action="{% url '회원정보수정' %}" method="post">
+        {% csrf_token %}
+        <div class="input-container">
+            <ul>
+                아이디 <input type="text" name="input_user_id" value="{{ request.user.user_id }}" readonly>
+            </ul>
+            <ul>
+                새 비밀번호 <input type="password" name="input_user_pw" value="">
+            </ul>
+            <ul>
+                새 비밀번호 확인 <input type="password" name="input_user_pw_confirm" value="">
+            </ul>
+            <ul>
+                이름 <input type="text" name="input_name" value="{{ request.user.name }}" readonly>
+            </ul>
+            <ul>
+                이메일 <input type="email" name="input_email" value="{{ request.user.email }}" readonly>
+            </ul>
+        </div>
+        <div class="button-container">
+            <ul>
+                <button type="submit">수정하기</button>
+            </ul>
+        </div>
+    </form>
+    
+    <form action="{% url '회원탈퇴' %}" method="post">
+        {% csrf_token %}
+        <button type="submit">회원탈퇴</button>
+    </form>
+
+    <div class="menu">
+        <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+        <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+        <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+        <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+        {% if daily_mission_cleared %}
+            <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+        {% else %}
+            <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+        {% endif %}
+        <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>게임 시작화면</title>
+    <!-- Pretendard 웹폰트 연결 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Pretendard', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            background-color: #f9f9f9; /* 배경 색상을 밝은 회색으로 설정 */
+        }
+        header {
+            display: flex;                 /* Flexbox로 정렬 */
+            flex-direction: row;          /* 가로 방향 정렬 */
+            justify-content: center;       /* 수평 중앙 정렬 */
+            flex-wrap: nowrap;            /* 요소가 한 줄에 정렬되도록 설정 */
+            background: linear-gradient(135deg, rgba(255, 235, 182, 0.8), rgba(255, 205, 74, 0.8), rgba(82, 214, 245, 0.6));
+            padding: 5px;                 /* 패딩 줄임 */
+            width: 100%;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            box-sizing: border-box;
+            height: 60px;                /* 높이 설정 */
+        }
+        
+        header h2 {
+            margin: 0 10px 0 15px;       /* 하단 여백 줄이고 좌측 여백 추가 */
+            font-size: 20px;              /* 폰트 크기 줄임 */
+        }
+        
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        header p {
+            margin: 0 15px 0 0;          /* 우측 여백 추가 */
+        }
+        .header-content {
+            display: flex;                  /* Flexbox 사용 */
+            align-items: center;           /* 세로 중앙 정렬 */
+            justify-content: center;        /* 수평 중앙 정렬 */
+            width: 100%;                   /* 전체 너비 사용 */
+        }
+        
+        .header-content h2 {
+            margin-right: 40px;            /* h2와 다음 요소 사이의 간격 조정 */
+        }
+        
+        .header-content .logout-button {
+            margin-right: 40px;            /* 로그아웃 버튼과 다음 요소 사이의 간격 조정 */
+        }
+        
+        .header-content p {
+            margin: 0;                     /* p 태그의 기본 여백 제거 */
+        }
+        
+        
+        .button-logout {
+            display: inline-block;
+            padding: 8px 16px; /* 패딩 줄임 */
+            background-color: #40b0e5;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 20px; /* 모서리 반경 줄임 */
+            font-size: 14px; /* 폰트 크기 줄임 */
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.3s ease;
+            text-shadow: none;
+        }
+
+        .button-logout:hover {
+            background-color: #3db7de;
+        }
+
+        .button-logout:active {
+            background-color: #2a9ab8;
+        }
+        .character {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px; /* 폰트 크기 조금 키움 */
+            background-color: #fff;
+            width: 45%; /* 너비 조금 키움 */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* 그림자 조정 */
+            border-radius: 7px; /* 모서리 반경 중간 값 */
+            height: auto;
+            margin: 7px 0; /* 상하 여백 중간 값 */
+            padding: 8px; /* 내부 여백 조금 추가 */
+        }
+        
+        .character p {
+            text-align: center;
+            margin: 6px 0; /* 상하 여백 중간 값 */
+        }
+        
+        .character img {
+            max-width: 110px; /* 최대 너비 조금 키움 */
+            max-height: 110px; /* 최대 높이 조금 키움 */
+            border-radius: 7px; /* 모서리 반경 중간 값 */
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* 그림자 조정 */
+            margin-bottom: 12px; /* 여백 조금 추가 */
+        }
+        
+        .character-name {
+            color: #52d6f5;
+            font-weight: bold;
+            font-size: 22px; /* 폰트 크기 중간 값 */
+            margin: 0; /* 상하 여백 유지 */
+        }
+        
+        .character-stats {
+            width: 28%; /* 표의 너비 중간 값 */
+            border-collapse: collapse;
+            margin: 3px auto; /* 여백 조금 추가 */
+        }
+        
+        .character-stats th, .character-stats td {
+            border: 1px solid #a89f60;
+            padding: 8px; /* 내부 여백 조금 추가 */
+            font-size: 15px; /* 글자 크기 조금 키움 */
+            text-align: center;
+        }
+        
+        .character-stats th {
+            background-color: #fafab9; /* 밝은 노란색 배경 */
+            color: #1f2420;            /* 어두운 색상으로 변경 */
+        }
+        
+        .exp-bar {
+            width: 50%; /* 폭을 줄임 */
+            height: 25px; /* 높이 줄임 */
+            background-color: #ddd;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 3px auto; /* 여백 줄임 */
+            padding: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .exp-bar .fill {
+            height: 100%;
+            background-color: #4caf50;
+            width: {{ experience_ratio|floatformat:2 }}%;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px; /* 모서리 둥글게 */
+            padding: 0 6px; /* 좌우 여백 줄임 */
+            font-size: 14px; /* 글자 크기 줄임 */
+        }
+        
+        .required-experience {
+            margin-right: 8px; /* 여백 줄임 */
+            color: #777;
+            font-weight: bold;
+            font-size: 14px; /* 글자 크기 줄임 */
+        }
+        
+
+        .clear-rate {
+            color: #40b0e5;
+            font-weight: bold;
+            font-size: 14px; /* 폰트 크기 줄임 */
+            text-shadow: 0 0 4px white,
+                         0 0 8px #52d6f5;
+            margin-left: 8px; /* 여백 줄임 */
+        }        
+        .clear-rate-bar {
+            width: 50%; /* 폭 줄임 */
+            height: 25px; /* 높이 줄임 */
+            background-color: #ddd;
+            border-radius: 25px;
+            overflow: hidden;
+            margin: 8px auto; /* 여백 줄임 */
+            padding: 2px;
+            font-size: 14px; /* 글자 크기 줄임 */
+
+        }
+
+        .clear-rate-bar .fill {
+            height: 100%;
+            background-color: #2196F3;
+            width: {{ clear_rate }}%;
+            color: white;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 25px;
+            margin: 0;
+            padding: 0 6px; /* 좌우 여백 줄임 */
+            font-size: 14px; /* 글자 크기 줄임 */
+
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white; /* 배경색을 흰색으로 설정 */
+            z-index: 10; /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* 하단 그림자 추가 */
+        }
+        
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+        
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black; /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+        
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+        
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+        
+
+        .exp-history {
+            width: 90%;
+            margin: 15px 0; /* 여백 줄임 */
+            border-collapse: collapse;
+        }
+        .exp-history th, .exp-history td {
+            border: 1px solid #ccc;
+            padding: 6px; /* 내부 여백 줄임 */
+            text-align: center;
+        }
+        .exp-history th {
+            background-color: #f9f9f9;
+        }
+
+        .table-container {
+            width: 90%;
+            max-height: 350px; /* 최대 높이 줄임 */
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            margin: 15px 0; /* 여백 줄임 */
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .character-quickbar {
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            gap: 20px; /* 항목 간 간격 설정 */
+            margin: 20px 0; /* 상하 여백 설정 */
+        }
+        
+        .character-quickbar a {
+            color: #52d6f5; /* 글자 색상 설정 */
+            text-decoration: none; /* 기본 밑줄 제거 */
+            font-size: 20px; /* 글자 크기 조정 */
+            transition: text-decoration 0.3s; /* 호버 시 부드러운 전환 효과 */
+        }
+        
+        .character-quickbar a:hover {
+            text-decoration: underline; /* 호버 시 밑줄 추가 */
+        }
+        
+    </style>
+    <script>
+        function toggleEnergy(onUrl, offUrl, isChecked) {
+            var url = isChecked ? onUrl : offUrl;
+            window.location.href = url;
+        }
+
+        function showAlert(message) {
+            alert(message);
+        }
+
+        window.onload = function() {
+            {% if messages %}
+                {% for message in messages %}
+                    showAlert("{{ message|escapejs }}");
+                {% endfor %}
+            {% endif %}
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h2>{{ request.user.user_id }} 님 환영합니다</h2>
+            <div class="logout-button">
+                <a href="{% url '로그아웃' %}" class="button-logout">로그아웃</a>
+            </div>
+            <p>미션 클리어율 <span class="clear-rate">{{ clear_rate }}%</span></p>
+        </div>
+    </header>
+    
+    
+
+    <div class="character">
+        <p>
+            <span class="character-name">{{ character.character_name }}</span>
+        </p>
+        <img src="https://www.keri.re.kr/images/kr/sub06/sub06_060702_img02.png" alt="캐릭터 이미지"> <!-- 캐릭터 이미지 삽입 -->
+        <table class="character-stats">
+            <tr>
+                <th>레벨</th>
+                <td>{{ character.level }}</td>
+            </tr>
+            <tr>
+                <th>공격력</th>
+                <td>{{ character.attack_power }}</td>
+            </tr>
+            <tr>
+                <th>방어력</th>
+                <td>{{ character.defense }}</td>
+            </tr>
+            <tr>
+                <th>체력</th>
+                <td>{{ character.health }}</td>
+            </tr>
+        </table>
+        <br>
+        <div class="character-quickbar">
+            <a href="{% url '캐릭터 선택 페이지' %}">캐릭터 변경</a>
+            <a href="{% url '레벨업 페이지' %}">레벨업</a>
+            <a href="{% url '마이페이지' %}">마이페이지</a>
+        </div>
+        
+    
+
+        <div class="exp-bar">
+            <div class="fill">
+                <div class="current-experience">
+                    {% if current_experience %}
+                        {{ current_experience }}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="required-experience">
+                {% if required_experience %}
+                    {{ required_experience }}
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="clear-rate-bar">
+            <div class="fill">{{ clear_rate }}%</div>
+        </div>
+    </div>
+    <footer>
+        <div class="menu">
+            <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+            <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+            <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+            <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+            {% if daily_mission_cleared %}
+                <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+            {% else %}
+                <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+            {% endif %}
+            <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+        </div>
+    </footer>
+    
+    
+</body>
+</html>

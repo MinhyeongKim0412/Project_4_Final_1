@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>랭커 정보</title>
+    <style>
+        body {
+            background-color: #f9f9f9;
+            /* 배경 색상을 밝은 회색으로 설정 */
+            display: flex;
+            flex-direction: column;
+            /* 수직 정렬 */
+            align-items: center;
+            /* 수평 중앙 정렬 */
+            justify-content: center;
+            /* 수직 중앙 정렬 */
+            height: 100vh;
+            /* 전체 화면 높이 사용 */
+            margin: 0;
+            /* 기본 여백 제거 */
+            font-family: 'Pretendard', sans-serif;
+            /* Pretendard 폰트 적용 */
+        }
+
+        h1 {
+            color: #FFCD4A;
+            text-align: center;
+            /* 중앙 정렬 */
+            margin: 5px 0;
+            /* 위아래 마진 줄이기 */
+        }
+
+        h3 {
+            font-size: 16px;
+            /* 전체 폰트 크기 줄임 */
+            text-align: center;
+            /* 중앙 정렬 */
+            margin: 5px 0;
+            /* 위아래 마진 줄이기 */
+        }
+
+        h4 {
+            margin: 5px 0;
+            /* 위아래 마진 줄이기 */
+        }
+
+        .character-gallery h4 {
+            color: #333333;
+        }
+
+        a {
+            text-decoration: none;
+            /* 밑줄 제거 */
+            color: #52d6f5;
+            /* 메인 색상 */
+            border-radius: 5px;
+            /* 테두리 둥글게 */
+            transition: background-color 0.3s, color 0.3s;
+            /* 부드러운 전환 효과 */
+        }
+
+        p {
+            margin: 4px 0;
+            /* 상하 간격을 2px로 설정, 좌우 간격은 0 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 10px;
+            text-decoration: none;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+
+        .user-info {
+            background-color: white;
+            /* 배경색 */
+            border-radius: 10px;
+            /* 둥근 모서리 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            /* 그림자 */
+            padding: 15px;
+            /* 내부 여백 */
+            width: 100%;
+            /* 전체 폭 사용 */
+            max-width: 280px;
+            /* 최대 폭 설정 (줄임) */
+            margin: 0 auto;
+            /* 중앙 정렬 */
+            display: flex;
+            /* 가로 정렬 */
+            align-items: center;
+            /* 세로 중앙 정렬 */
+            text-align: center;
+            /* 글자 가운데 정렬 추가 */
+        }
+
+        .character-gallery {
+            display: grid;
+            /* 그리드 레이아웃 사용 */
+            grid-template-columns: repeat(3, 1fr);
+            /* 4열 레이아웃 */
+            gap: 15px;
+            /* 카드 간 간격 */
+            margin: 20px;
+            /* 갤러리 마진 */
+            width: 70%;
+            /* 전체 폭 사용 */
+            max-width: 900px;
+            /* 최대 폭 설정 (줄임) */
+            background-color: #fafab9;
+            /* 은은한 하늘색 배경 */
+            padding: 20px;
+            /* 내부 여백 */
+            border-radius: 10px;
+            /* 둥글 모서리 */
+        }
+
+        .character-card {
+            background-color: white;
+            /* 카드 배경 색상 */
+            border-radius: 10px;
+            /* 카드 둥글기 */
+            padding: 10px;
+            /* 카드 내 여백 */
+            text-align: center;
+            /* 텍스트 중앙 정렬 */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            /* 그림자 추가 */
+            transition: transform 0.3s;
+            /* 부드러운 전환 효과 */
+            font-size: 14px;
+            /* 카드 내 텍스트 크기 조정 */
+        }
+
+        .character-card:hover {
+            transform: scale(1.05);
+            /* 카드 호버 시 확대 효과 */
+        }
+
+        .character-card h4 {
+            margin: 5px 0;
+            /* 카드 제목 간격 */
+            font-size: 20px;
+            /* 제목 크기 줄임 */
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    {% if user and characters and main_character %}
+    <h3>[ 레벨 랭킹 ]</h3>
+    <h2><span style="color: #52d6f5;">{{ user.user_id }}</span>님의 상세정보</h2>
+    <a href="{% url '친구 신청' user.id %}">친구신청</a>
+    <p>메인 캐릭터: " {{ main_character.character_name }} "</p>
+    <p><strong>보유 캐릭터 목록</strong></p>
+    <div class="character-gallery">
+        {% for character in characters %}
+        <div class="character-card">
+            <h4>{{ character.character_name }}</h4>
+            <br>
+            <p>레벨: {{ character.level }}</p>
+            <p>공격력: {{ character.attack_power }}</p>
+            <p>방어력: {{ character.defense }}</p>
+            <p>체력: {{ character.health }}</p>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- 도전랭킹 -->
+    {% if challenge_user and challenge_characters and challenge_main_character %}
+    <h3>[ 도전 랭킹 ]</h3>
+    <h2><span style="color: #52d6f5;">{{ challenge_user.user_id }}</span>님의 상세정보</h2>
+    <a href="{% url '친구 신청' challenge_user.id %}">친구신청</a>
+    <p>메인 캐릭터: " {{ challenge_main_character.character_name }} "</p>
+    <p><strong>보유 캐릭터 목록</strong></p>
+    <div class="character-gallery">
+        {% for character in challenge_characters %}
+        <div class="character-card">
+            <h4>{{ character.character_name }}</h4>
+            <br>
+            <p>레벨: {{ character.level }}</p>
+            <p>공격력: {{ character.attack_power }}</p>
+            <p>방어력: {{ character.defense }}</p>
+            <p>체력: {{ character.health }}</p>
+            <br>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="menu">
+        <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+        <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+        <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+        <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+        {% if daily_mission_cleared %}
+        <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+        {% else %}
+        <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+        {% endif %}
+        <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+    </div>
+</body>
+
+</html>

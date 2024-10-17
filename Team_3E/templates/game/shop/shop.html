@@ -1,0 +1,277 @@
+<!-- 김민형_0930 -->
+
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>캐릭터 상점</title>
+</head>
+<style>
+    body {
+        font-family: 'Pretendard', sans-serif;
+        background-color: #f9f9f9;
+        /* 배경 색상을 밝은 회색으로 설정 */
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    .shop-container {
+        max-width: 1000px;
+        margin: 40px auto 0;
+        padding: 15px;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        min-height: 500px;
+    }
+
+    h1 {
+        font-size: 2em;
+        color: #FFCD4A;
+        /* 포인트 컬러 적용 */
+        margin-bottom: 15px;
+    }
+
+    button {
+        font-family: 'Pretendard', sans-serif;
+        background-color: #ffffff;
+        color: #FFCD4A;
+        /* 포인트 컬러 적용 */
+        border: 2px solid #FFCD4A;
+        /* 포인트 컬러 테두리 적용 */
+        border-radius: 8px;
+        padding: 6px 12px;
+        font-size: 0.9em;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    button:hover {
+        background-color: #FFCD4A;
+        /* hover 시 포인트 컬러 배경 적용 */
+        color: #ffffff;
+    }
+
+    button+span {
+        margin-left: 8px;
+    }
+
+    .draw-btn,
+    .buy-btn {
+        padding: 10px 20px;
+    }
+
+    .draw-btn {
+        background-color: #FFCD4A;
+        /* 포인트 컬러 배경 적용 */
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .draw-btn:hover {
+        background-color: #E6B849;
+        /* hover 시 약간 어두운 포인트 컬러 */
+    }
+
+    .character-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+    }
+
+    .character-item {
+        background-color: #FFCD4A;
+        /* 포인트 컬러 배경 적용 */
+        border-radius: 12px;
+        padding: 15px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .character-item h3 {
+        font-size: 1.3em;
+        color: #333;
+    }
+
+    .menu {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 10px;
+        padding: 8px 0;
+    }
+
+    .menu a {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+        margin: 0 10px;
+        font-size: 30px;
+        text-decoration: none;
+        background: none;
+        border: none;
+    }
+
+
+    .menu a::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 5px;
+        border-radius: 5px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 1000;
+        font-size: 20px;
+    }
+
+    .menu a:hover::after {
+        opacity: 1;
+        visibility: visible;
+        font-size: 20px;
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        background-color: white;
+        /* 배경색을 흰색으로 설정 */
+        z-index: 10;
+        /* 다른 요소보다 위에 오도록 설정 */
+        box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        /* 하단 그림자 추가 */
+    }
+
+    .menu {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 0;
+        background-color: white;
+    }
+
+    .menu a {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+        margin: 0 10px;
+        font-size: 30px;
+        text-decoration: none;
+        color: black;
+        /* 아이콘 색상 */
+        background: none;
+        border: none;
+    }
+
+    .menu a::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #f0f0f0;
+        color: #333;
+        padding: 5px;
+        border-radius: 5px;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s, visibility 0.3s;
+        z-index: 1000;
+        font-size: 20px;
+    }
+
+    .menu a:hover::after {
+        opacity: 1;
+        visibility: visible;
+        font-size: 20px;
+    }
+</style>
+
+<body>
+    <div class="shop-container">
+        <h1>캐릭터 상점</h1>
+        {% if user %}
+        보유 재화: 🪙 {{ user.coins }}코인
+        {% endif %}
+        <br>
+        <br>
+        <form action="{% url '캐릭터_뽑기' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="draw-btn">캐릭터 뽑기</button> 50코인
+        </form>
+
+        <div class="character-grid">
+            {% for character in characters %}
+            <div class="character-item">
+                <h3>{{ character.name }}</h3>
+                <p>{{ character.price }} 코인</p>
+                <form action="{% url '캐릭터_구매' character.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="buy-btn">구매</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+
+        <form action="{% url '경험치 구매' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">캐릭터 경험치 구매</button><span>500코인</span>
+        </form>
+        <br>
+        <form action="{% url '경험치 이전 페이지' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">경험치 이전권 구매</button><span>1000코인</span>
+        </form>
+
+
+    </div>
+
+    {% if messages %}
+    <script>
+        window.onload = function () {
+            var uniqueMessages = new Set(); // 중복 제거를 위한 Set 사용
+            {% for message in messages %}
+            uniqueMessages.add("{{ message|escapejs }}"); // 메시지를 Set에 추가
+            {% endfor %}
+            uniqueMessages.forEach(function (message) {
+                alert(message); // 유일한 메시지를 팝업으로 표시
+            });
+        }
+    </script>
+    {% endif %}
+    <br>
+    <footer>
+        <div class="menu">
+            <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+            <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+            <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+            <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+            {% if daily_mission_cleared %}
+                <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+            {% else %}
+                <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+            {% endif %}
+            <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+        </div>
+    </footer>
+</body>
+
+</html>

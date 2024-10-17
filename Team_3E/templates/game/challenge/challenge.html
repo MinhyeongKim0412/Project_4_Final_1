@@ -1,0 +1,258 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>도전 단계 선택</title>
+    <style>
+        body {
+            background-image: url("{% static 'images/background.png' %}");
+            /* 배경 이미지 경로 */
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            /* 세로 방향으로 정렬 */
+            justify-content: center;
+            /* 수직 중앙 정렬 */
+            align-items: center;
+            /* 수평 중앙 정렬 */
+            height: 100vh;
+            text-align: center;
+            font-family: 'Pretendard', sans-serif;
+            /* Pretendard 폰트 적용 */
+            margin: 0;
+            /* 기본 여백 제거 */
+            background-color: #f9f9f9;
+            /* 배경 색상을 밝은 회색으로 설정 */
+
+        }
+
+        .container {
+            background-color: #52d6f5;
+            padding: 30px;
+            border-radius: 10px;
+            width: 70%;
+            /* 화면의 70%로 설정 */
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            /* 그림자 추가 */
+        }
+
+        h2 {
+            color: #FFCD4A;
+            /* 메인 색상 */
+            margin: 0 0 20px;
+            /* 상단 마진 제거, 하단 마진 20px 설정 */
+            font-size: 32px;
+            /* h2 크기 설정 */
+        }
+
+
+        h1 {
+            color: #52d6f5;
+            /* 메인 색상 */
+            margin-bottom: 20px;
+            /* 제목과 버튼 간격 */
+            font-size: 24px;
+            /* 제목 크기 조정 */
+        }
+
+        .level-container {
+            display: flex;
+            flex-direction: column-reverse;
+            /* 버튼들을 아래에서 위로 쌓이게 함 */
+            align-items: center;
+            /* 수평 중앙 정렬 */
+        }
+
+        .level-button {
+            padding: 8px 16px;
+            /* 패딩 크기 조정 */
+            margin: 5px 0;
+            /* 버튼 사이 여백 */
+            font-size: 16px;
+            /* 버튼 폰트 크기 조정 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            /* 버튼 전체 폭 사용 */
+            transition: background-color 0.3s, transform 0.2s;
+            /* 부드러운 전환 효과 */
+        }
+
+
+        .cleared {
+            background-color: #52d6f5;
+            /* 클리어된 단계 색상 (메인 색상으로 변경) */
+        }
+
+        .cleared:hover {
+            background-color: #49c8e0;
+            /* 호버 시 색상 변화 (메인 색상 변형) */
+        }
+
+        .locked {
+            background-color: #d9534f;
+            /* 잠긴 단계 색상 */
+            opacity: 0.7;
+            /* 잠긴 버튼 투명도 */
+        }
+
+        .locked:hover {
+            cursor: not-allowed;
+            /* 잠긴 버튼 호버 시 커서 변경 */
+        }
+
+        .next-level {
+            background-color: #52d6f5;
+            /* 선택된 단계 색상 (메인 색상) */
+        }
+
+        .next-level:hover {
+            background-color: #49c8e0;
+            /* 호버 시 색상 변화 (메인 색상 변형) */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            position: absolute;
+            /* 화면 하단에 고정 */
+            bottom: 10px;
+            /* 하단 여백 */
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>도전 단계</h2> <!-- 추가된 도전 단계 제목 -->
+    <div class="level-container">
+        <!-- 레벨 버튼들 -->
+        {% for level in levels %}
+        {% if level <= max_level %} <button class="level-button cleared" disabled>{{ level }}단계 (클리어됨)</button>
+            {% elif level == next_level %}
+            <!-- 레벨 선택 시 전투 상태를 초기화 -->
+            <a href="{% url '배틀_초기화' level %}">
+                <button class="level-button">{{ level }}단계</button>
+            </a>
+            {% else %}
+            <button class="level-button locked" disabled>{{ level }}단계 (잠김)</button>
+            {% endif %}
+            {% endfor %}
+    </div>
+
+    <footer>
+        <div class="menu">
+            <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+            <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+            <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+            <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+            {% if daily_mission_cleared %}
+                <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+            {% else %}
+                <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+            {% endif %}
+            <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+        </div>
+    </footer>
+</body>
+
+</html>

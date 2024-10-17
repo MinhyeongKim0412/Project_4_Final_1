@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.user_id }}님의 정보</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f9f9f9;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h3 {
+            color: #FFCD4A;
+            margin-bottom: 15px;
+        }
+
+        .character-list {
+            margin-top: 20px;
+            background-color: #fafab9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: inline-block;
+            text-align: left;
+            /* 텍스트 왼쪽 정렬 */
+        }
+
+        .character-title {
+            background-color: #52d6f5;
+            /* 캐릭터 제목 색상 */
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            /* 커서 변경 */
+            margin-bottom: 5px;
+            /* 간격 추가 */
+            transition: background-color 0.3s;
+            /* 호버 효과 전환 */
+        }
+
+        .character-title:hover {
+            background-color: #3bb1d1;
+            /* 호버 시 색상 변화 */
+        }
+
+        .character-info {
+            display: none;
+            /* 기본적으로 숨김 */
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            /* 간격 추가 */
+            background-color: #ffffff;
+            /* 캐릭터 정보 배경색 */
+            font-size: 15px;
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            height: 10px;
+            margin-top: 20px;
+            /* 상단 마진 추가 */
+            text-decoration: none;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            background: none;
+            border: none;
+        }
+
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: white;
+            /* 배경색을 흰색으로 설정 */
+            z-index: 10;
+            /* 다른 요소보다 위에 오도록 설정 */
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            /* 하단 그림자 추가 */
+        }
+
+        .menu {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 10px 0;
+            background-color: white;
+        }
+
+        .menu a {
+            position: relative;
+            display: inline-block;
+            z-index: 1;
+            margin: 0 10px;
+            font-size: 30px;
+            text-decoration: none;
+            color: black;
+            /* 아이콘 색상 */
+            background: none;
+            border: none;
+        }
+
+        .menu a::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 5px;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+            font-size: 20px;
+        }
+
+        .menu a:hover::after {
+            opacity: 1;
+            visibility: visible;
+            font-size: 20px;
+        }
+    </style>
+    <script>
+        function toggleAccordion(characterId) {
+            const info = document.getElementById(characterId);
+            info.style.display = info.style.display === "block" ? "none" : "block"; // 보이기/숨기기
+        }
+    </script>
+</head>
+
+<body>
+
+    {% if user and characters and main_character %}
+    <h1>{{ user.user_id }} 님의 상세정보</h1>
+
+    <h3>보유 캐릭터 목록</h3>
+    <div class="character-list">
+        <div class="character-info">
+            메인 캐릭터: {{ main_character.character_name }}
+        </div>
+        {% for character in characters %}
+        <div class="character-title" onclick="toggleAccordion('info-{{ forloop.counter }}')">
+            {{ character.character_name }}
+        </div>
+        <div class="character-info" id="info-{{ forloop.counter }}">
+            레벨 {{ character.level }}<br>
+            공격력 {{ character.attack_power }}<br>
+            방어력 {{ character.defense }}<br>
+            체력 {{ character.health }}<br>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <br>
+    <div class="menu">
+        <a href="{% url '랭킹' %}" data-tooltip="랭킹">🥇</a>
+        <a href="{% url '친구' %}" data-tooltip="친구">👥</a>
+        <a href="{% url '게임_메인' %}" data-tooltip="게임_메인">🏠</a>
+        <a href="{% url '도전' %}" data-tooltip="도전">🆚</a>
+        {% if daily_mission_cleared %}
+        <a href="#" style="pointer-events: none; color: gray;" data-tooltip="미션">🗓️</a>
+        {% else %}
+        <a href="{% url '일일 미션 페이지' %}" data-tooltip="미션">🗓️</a>
+        {% endif %}
+        <a href="{% url '상점' %}" data-tooltip="상점">🛒</a>
+    </div>
+
+</body>
+
+</html>

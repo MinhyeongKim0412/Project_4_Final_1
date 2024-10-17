@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <title>미션 수행</title>
+    <style>
+        body {
+            background-color: #f9f9f9; /* 배경 색상을 밝은 회색으로 설정 */
+            display: flex;
+            flex-direction: column; /* 수직 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            justify-content: center; /* 수직 중앙 정렬 */
+            height: 100vh; /* 전체 화면 높이 사용 */
+            margin: 0; /* 기본 여백 제거 */
+            font-family: 'Pretendard', sans-serif; /* Pretendard 폰트 적용 */
+        }
+    
+        h1 {
+            margin-top: 5px; /* 상단 마진 최소화 */
+            margin-bottom: 5px; /* 하단 마진 최소화 */
+            color: #FFCD4A; /* 글자색을 #FFCD4A로 설정 */
+        }        
+    
+        h2 {
+            margin-bottom: 10px; /* 하위 제목과 항목 간격 */
+            color: #52d6f5; /* 하위 제목 색상 */
+            font-size: 19px;
+        }
+    
+        p {
+            margin-bottom: 10px; /* 문단 간격 */
+            color: #333; /* 일반 텍스트 색상 */
+        }
+    
+        .form-container {
+            display: flex;
+            flex-direction: column; /* 세로 정렬 */
+            align-items: center; /* 수평 중앙 정렬 */
+            margin-bottom: 20px; /* 폼과 다른 요소 간격 */
+            width: 100%; /* 전체 폭 사용 */
+        }
+        .form-fields {
+            background-color: #ffffe9; /* 아주 연한 노랑색 */
+            padding: 20px; /* 상하좌우 패딩 */
+            padding-left: 100px; /* 왼쪽 패딩만 40px으로 더 넓게 */
+            border-radius: 10px; /* 테두리 없는 직사각형 모양 */
+            width: 90%;
+        }
+        
+        
+        .form-fields label, 
+        .form-fields input[type="file"] {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+        .button-result button {
+            font-family: 'Pretendard', sans-serif;
+        }
+
+    
+        button {
+            background-color: #52d6f5; /* 버튼 색상 */
+            color: white; /* 버튼 텍스트 색상 */
+            border: none; /* 테두리 없음 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            padding: 10px 15px; /* 내부 여백 */
+            cursor: pointer; /* 커서 포인터로 변경 */
+            margin-top: 10px; /* 버튼과 상단 요소 간격 */
+            transition: background-color 0.3s; /* 효과 전환 */
+        }
+    
+        button:hover {
+            background-color: #3bb1d1; /* 호버 시 색상 변화 */
+        }
+    
+        img {
+            max-width: 90%; /* 이미지 크기 조절 */
+            height: auto; /* 비율 유지 */
+            margin: 10px 0; /* 이미지 간격 */
+        }
+    
+        /* 추가적인 스타일 */
+        .alert {
+            color: #ff0000; /* 경고 텍스트 색상 */
+            margin: 10px 0; /* 경고 메시지 간격 */
+        }
+    
+        .result-header {
+            color: #52d6f5; /* 결과 제목 색상 */
+            margin: 15px 0; /* 결과 제목 간격 */
+        }
+        .button-result {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px; /* 위아래 여백은 필요에 따라 조절 */
+        }
+        .custom-divider {
+            text-align: center;
+            margin: 20px 0; /* 구분선 위아래 간격 */
+        }
+        
+        .custom-divider .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: #ccc; /* 회색 점 */
+            border-radius: 50%; /* 점을 둥글게 */
+            margin: 0 5px; /* 점 사이 간격 */
+        }
+        .result-image {
+            display: flex;
+            justify-content: space-around; /* 각 섹션 간 간격을 일정하게 */
+            align-items: flex-start; /* 모든 항목을 상단 정렬 */
+            flex-wrap: wrap; /* 화면이 좁아지면 다음 줄로 넘어가도록 설정 */
+            gap: 20px; /* 각 섹션 사이의 간격 */
+        }
+        
+        .result-image div {
+            flex: 1;
+            max-width: 45%; /* 각 섹션의 최대 너비를 제한 */
+        }
+        .result-image-column {
+            display: flex;
+            flex-direction: column; /* 세로 정렬 */
+            align-items: center; /* 내용물 중앙 정렬 */
+            text-align: center; /* 텍스트 중앙 정렬 */
+            width: 45%; /* 열의 너비를 45%로 제한 */
+        }
+        
+        .result-image-column img {
+            width: 100%; /* 이미지를 열 너비에 맞춤 */
+            height: auto;
+        }
+        .result-image img {
+            width: 100%; /* 프레임의 너비에 맞게 조절 */
+            height: auto; /* 가로세로 비율 유지 */
+            object-fit: cover; /* 가로세로 비율 변화 없이 이미지 맞춤 */
+        }
+        
+        .image-frame {
+            width: 300px; /* 프레임의 너비 설정 */
+            height: 300px; /* 프레임의 높이 설정 */
+            overflow: hidden; /* 넘치는 부분 숨기기 */
+            border-radius: 15px; /* 둥근 모서리 */
+            display: flex; /* 플렉스박스 사용하여 중앙 정렬 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: center; /* 수직 중앙 정렬 */
+        }
+        
+    </style>
+    
+</head>
+<body>
+    <h4>미션</h4>
+    <h1>{{ mission.mission_template.get_mission_type_display }}</h1>
+    <p>: {{ mission.mission_template.description }}</p>
+    <div class="custom-divider">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+    </div>
+    <h3>이전과 이후의 사진을 업로드하세요</h3>
+
+    <form action="{% url 'perform_mission' mission.id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="form-fields">
+            {{ form.before_image.label_tag }} {{ form.before_image }} <!-- '이전 사진' 라벨과 필드 -->
+            {{ form.after_image.label_tag }} {{ form.after_image }}   <!-- '이후 사진' 라벨과 필드 -->
+        </div>
+    
+        <div class="button-result">
+            <button type="submit">결과보기</button>
+        </div>
+    </form>
+    <br>
+    <div class="result-image">
+        <div class="result-image-column">
+            {% if result_image_path_before %}
+                <h2>탐지 결과 (이전 사진)</h2>
+                {% if num_plug_off_before > 0 %}
+                    <p>탐지된 콘센트 개수: {{ num_plug_off_before }}</p>
+                {% endif %}
+            
+                {% if num_light_off_before > 0 %}
+                    <p>탐지된 전등 개수: {{ num_light_off_before }}</p>
+                {% endif %}
+    
+                <div class="image-frame">
+                    <img src="/{{ result_image_path_before }}" alt="이전 탐지 결과 이미지">
+                </div>
+            {% endif %}
+        </div>
+        <div class="result-image-column">
+            {% if result_image_path_after %}
+                <h2>탐지 결과 (이후 사진)</h2>
+                {% if num_plug_off_after > 0 %}
+                    <p>탐지된 콘센트 개수: {{ num_plug_off_after }}</p>
+                {% endif %}
+            
+                {% if num_light_off_after > 0 %}
+                    <p>탐지된 전등 개수: {{ num_light_off_after }}</p>
+                {% endif %}
+    
+                <div class="image-frame">
+                    <img src="/{{ result_image_path_after }}" alt="이후 탐지 결과 이미지">
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    
+
+    <!-- 미션 완료 버튼 추가 -->
+    {% if num_light_off_after > num_light_off_before or num_plug_off_after > num_plug_off_before %}
+        <form action="{% url 'complete_mission' mission.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit">미션 완료하기</button>
+        </form>
+    {% endif %}
+</body>
+</html>
